@@ -8,6 +8,8 @@ const app = express();
 
 const path = require('path');
 
+const helmet = require('helmet');
+
 mongoose.connect('mongodb+srv://PiqUser:KyLiAfUe2011@mycluster1.srkz5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -23,6 +25,7 @@ app.use((req, res, next) => {
   next();
   });
 
+app.use(helmet());  
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
