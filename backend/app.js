@@ -1,6 +1,7 @@
 const express = require('express'); 
 const mongoose = require('mongoose');
 
+
 const saucesRoutes = require('./routes/sauces');
 const authRoutes = require('./routes/auth'); 
 
@@ -10,14 +11,17 @@ const path = require('path');
 
 const helmet = require('helmet');
 
-mongoose.connect('mongodb+srv://PiqUser:KyLiAfUe2011@mycluster1.srkz5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+require('dotenv').config();
+
+//Connextion à MongoDB
+mongoose.connect('mongodb+srv://' + process.env.DB_USER + ':' + process.env.DB_PASSWORD + '@mycluster1.srkz5.mongodb.net/' + process.env.DB_NAME + '?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
-//middleware Cors
+//Middleware Cors
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -25,14 +29,21 @@ app.use((req, res, next) => {
   next();
   });
 
+//Configuration des en-têtes HTTP securisée 
 app.use(helmet());  
+
+//
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//Route image
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-/* ROUTES */
-app.use('/api/sauces', saucesRoutes);
+//route utilisateurs
 app.use('/api/auth', authRoutes);
 
+//route sauces
+app.use('/api/sauces', saucesRoutes);
+
+//permet l'exportation
 module.exports = app;
