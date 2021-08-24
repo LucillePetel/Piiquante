@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 //création shema de validation de mot de passe
 const passwordSchema = new passwordValidator(); 
 
-const User = require('../models/user');
+const User = require('../models/User');
 
 //ajout des propiétés 
 passwordSchema
@@ -31,9 +31,11 @@ exports.signUp = (req, res, next) => {
           });
           user.save()
             .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-            .catch(error => res.status(400).json({ error }));
+            .catch(error => res.status(400).json({error}));
         })
-        .catch(error => res.status(500).json({ error })); 
+        .catch(error => res.status(500).json({error})); 
+    } else {
+      throw 'Votre mot de passe doit avoir 8 caractère minimum et contenir au moins 1 majuscule, 1 minuscule et 2 chiffres'
     }
 }
 
