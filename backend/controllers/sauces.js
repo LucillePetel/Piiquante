@@ -3,7 +3,6 @@ const Sauce = require('../models/Sauce');
 
 const fs = require('fs');
 
-
 //Créer une nouvelle sauce 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce)
@@ -32,11 +31,11 @@ exports.modifySauce = (req, res, next) => {
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOneAndDelete({_id: req.params.id})
         .then(sauce => {
-            const filename = sauce.imageUrl.split('/image/')[1]; 
+            const filename = sauce.imageUrl.split('/images/')[1]; 
             fs.unlink(`images/${filename}`, () => {
                 Sauce.deleteOne({_id: req.params.id})
                     .then(() => res.status(200).json({message:'Sauce supprimée !'}))
-                   // .catch(error.status(400).json({error}));
+                    //.catch(error.status(400).json({error}));
             });
         })
         .catch(error => res.status(500).json({error}))
